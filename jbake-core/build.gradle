@@ -1,5 +1,32 @@
 import java.text.SimpleDateFormat
 
+plugins {
+    id "org.sonarqube" version "2.6.2"
+}
+
+ext {
+    isTravis = (System.getenv("TRAVIS") == "true")
+    isTravisPullRequest = (System.getenv("TRAVIS_PULL_REQUEST")) != "false"
+    pullRequestId = System.getenv("TRAVIS_PULL_REQUEST")
+}
+
+sonarqube {
+    properties {
+        property "sonar.host.url", System.getenv('SONAR_HOST')
+        property "sonar.organization", System.getenv('SONARORG')
+        property "sonar.login", System.getenv('SONARLOGIN')
+        property "sonar.projectKey", "org.jbake.ancho:example:jbake"
+
+        if ( isTravis && isTravisPullRequest ) {
+            property "sonar.analysis.mode", "preview"
+            property "sonar.github.oauth", System.getenv("GITHUBTOKEN")
+            property "sonar.github.repository", "ancho/jbake"
+            property "sonar.github.pullRequest", pullRequestId
+        }
+    }
+}
+
+
 description = "The core library of JBake"
 
 dependencies {

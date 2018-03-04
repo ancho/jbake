@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if [ $TRAVIS_PULL_REQUEST != "false" ]; then
+    export SONARQUBE_SKIPPED=false
+    ./gradlew sonarqube -Dsonar.host.url=$SONAR_HOST -Dsonar.organization=$SONARORG -Dsonar.login=$SONARLOGIN -Dsonar.github.oauth=$GITHUBTOKEN -Dsonar.github.repository=$GITHUB_REPO -Dsonar.github.pullRequest=$TRAVIS_PULL_REQUEST
+else
+    echo "Skip Sonar pull-request"
+fi
