@@ -8,16 +8,20 @@ addons:
 
 install: true
 
-jdk:
-- oraclejdk9
-- oraclejdk8
-- openjdk8
-- openjdk7
-
 script:
 - "./gradlew check"
+
 after_failure:
 - "./gradlew check -i --stacktrace"
+
+matrix:
+  include:
+    - jdk: oraclejdk9
+    - jdk: oraclejdk8
+    - jdk: openjdk8
+    - jdk: openjdk7
+      dist: precise
+    - os: osx
 
 jobs:
   include:
