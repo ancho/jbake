@@ -8,19 +8,19 @@ addons:
 
 install: true
 
+jdk:
+- oraclejdk9
+- oraclejdk8
+- openjdk8
+- openjdk7
+
+script:
+- "./gradlew check"
+after_failure:
+- "./gradlew check -i --stacktrace"
+
 jobs:
   include:
-
-  - stage: Testing
-    jdk:
-    - oraclejdk9
-    - oraclejdk8
-    - openjdk8
-    - openjdk7
-    script:
-    - "./gradlew check"
-    after_failure:
-    - "./gradlew check -i --stacktrace"
 
   - stage: Quality Check
     jdk: oraclejdk8
