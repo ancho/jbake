@@ -5,8 +5,23 @@ addons:
   hosts:
   - jbake-builder
   hostname: jbake-builder
+
+install: true
+
 jobs:
   include:
+
+  - stage: Testing
+    jdk:
+    - oraclejdk9
+    - oraclejdk8
+    - openjdk8
+    - openjdk7
+    script:
+    - "./gradlew check"
+    after_failure:
+    - "./gradlew check -i --stacktrace"
+
   - stage: Quality Check
     jdk: oraclejdk8
     env:
@@ -16,10 +31,12 @@ jobs:
     script:
     - "./gradlew jacocoRootReport"
     after_success:
-    - "./gradlew sonarqube -d --stacktrace"
+    - "./gradlew sonarqube -i --stacktrace"
+
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
 - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
 cache:
   directories:
   - "$HOME/.m2/repository"
