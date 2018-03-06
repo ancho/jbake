@@ -1,6 +1,7 @@
 language: java
-os: linux
+
 dist: trusty
+
 addons:
   hosts:
   - jbake-builder
@@ -14,17 +15,21 @@ script:
 after_failure:
 - "./gradlew check -i --stacktrace"
 
-matrix:
-  include:
-    - jdk: oraclejdk9
-    - jdk: oraclejdk8
-    - jdk: openjdk8
-    - jdk: openjdk7
-      dist: precise
-    - os: osx
+jdk:
+  - oraclejdk9
+  - oraclejdk8
+  - openjdk8
 
 jobs:
   include:
+
+  - script: "./gradlew check"
+    jdk: openjdk7
+    dist: precise
+
+  - script: "./gradlew check"
+    jdk:
+    os: osx
 
   - stage: Quality Check
     jdk: oraclejdk8
