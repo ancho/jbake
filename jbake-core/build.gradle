@@ -1,7 +1,10 @@
+import org.gradle.api.JavaVersion
+
 import java.text.SimpleDateFormat
 
+
 plugins {
-    id "org.sonarqube" version "2.6.2"
+    id "org.sonarqube" version "2.6.2" apply false
 }
 
 ext {
@@ -10,18 +13,22 @@ ext {
     pullRequestId = System.getenv("TRAVIS_PULL_REQUEST")
 }
 
-sonarqube {
-    properties {
-        property "sonar.host.url", System.getenv('SONAR_HOST')
-        property "sonar.organization", System.getenv('SONARORG')
-        property "sonar.login", System.getenv('SONARLOGIN')
-        property "sonar.projectKey", "org.jbake.ancho:example:jbake"
+if ( JavaVersion.current().isJava8Compatible() ) {
+    apply plugin: "org.sonarqube"
 
-        if ( isTravis && isTravisPullRequest ) {
-            property "sonar.analysis.mode", "preview"
-            property "sonar.github.oauth", System.getenv("GITHUBTOKEN")
-            property "sonar.github.repository", "ancho/jbake"
-            property "sonar.github.pullRequest", pullRequestId
+    sonarqube {
+        properties {
+            property "sonar.host.url", System.getenv('SONAR_HOST')
+            property "sonar.organization", System.getenv('SONARORG')
+            property "sonar.login", System.getenv('SONARLOGIN')
+            property "sonar.projectKey", "org.jbake.ancho:example:jbake"
+
+            if (isTravis && isTravisPullRequest) {
+                property "sonar.analysis.mode", "preview"
+                property "sonar.github.oauth", System.getenv("GITHUBTOKEN")
+                property "sonar.github.repository", "ancho/jbake"
+                property "sonar.github.pullRequest", pullRequestId
+            }
         }
     }
 }
