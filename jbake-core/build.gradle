@@ -1,38 +1,6 @@
-import org.gradle.api.JavaVersion
-
 import java.text.SimpleDateFormat
 
-
-plugins {
-    id "org.sonarqube" version "2.6.2" apply false
-}
-
-ext {
-    isTravis = (System.getenv("TRAVIS") == "true")
-    isTravisPullRequest = (System.getenv("TRAVIS_PULL_REQUEST")) != "false"
-    pullRequestId = System.getenv("TRAVIS_PULL_REQUEST")
-}
-
-if ( JavaVersion.current().isJava8Compatible() ) {
-    apply plugin: "org.sonarqube"
-
-    sonarqube {
-        properties {
-            property "sonar.host.url", System.getenv('SONAR_HOST')
-            property "sonar.organization", System.getenv('SONARORG')
-            property "sonar.login", System.getenv('SONARLOGIN')
-            property "sonar.projectKey", "org.jbake.ancho:example:jbake"
-
-            if (isTravis && isTravisPullRequest) {
-                property "sonar.analysis.mode", "preview"
-                property "sonar.github.oauth", System.getenv("GITHUBTOKEN")
-                property "sonar.github.repository", "ancho/jbake"
-                property "sonar.github.pullRequest", pullRequestId
-            }
-        }
-    }
-}
-
+apply from: "$rootDir/gradle/sonarqube.gradle"
 
 description = "The core library of JBake"
 
@@ -58,8 +26,8 @@ dependencies {
 processResources {
     from("src/main/resources") {
         include 'default.properties'
-        expand  jbakeVersion: project.version,
-                timestamp: new SimpleDateFormat("yyyy-MM-dd HH:mm:ssa").format( new Date() )
+        expand jbakeVersion: project.version,
+                timestamp: new SimpleDateFormat("yyyy-MM-dd HH:mm:ssa").format(new Date())
     }
 }
 

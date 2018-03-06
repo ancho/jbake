@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-if [ $TRAVIS_PULL_REQUEST = "false" ] && [ $TRAVIS_BRANCH = "master" ]; then
-    export SONARQUBE_SKIPPED=false
-    ./gradlew sonarqube -Dsonar.host.url=$SONAR_HOST -Dsonar.organization=$SONARORG -Dsonar.login=$SONARLOGIN
-else
-    echo "Skip Sonar request. Current Branch $TRAVIS_BRANCH"
-fi
