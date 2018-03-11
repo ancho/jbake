@@ -1,6 +1,6 @@
 = JBake
 Jonathan Bullock
-2013-10-20
+2017-05-11
 :idprefix:
 
 == JBake
@@ -8,10 +8,13 @@ Jonathan Bullock
 http://jbake.org[JBake] is a Java based open source static site/blog generator for developers.
 
 image:https://img.shields.io/travis/jbake-org/jbake/master.svg["Build Status", link="https://travis-ci.org/jbake-org/jbake"]
+image:https://ci.appveyor.com/api/projects/status/2q7hvg03wsjx953b?svg=true["Appveyor Status", link="https://ci.appveyor.com/project/jbake-org/jbake"]
 image:https://img.shields.io/coveralls/jbake-org/jbake/master.svg["Coverage Status", link="https://coveralls.io/r/jbake-org/jbake"]
 image:https://img.shields.io/maven-central/v/org.jbake/jbake-core.svg["Maven Download", link="http://jbake.org/download.html#maven"]
 image:https://api.bintray.com/packages/jbake/maven/jbake-core/images/download.svg["Bintray Download", link="https://bintray.com/jbake/maven/jbake-core/_latestVersion"]
 image:https://img.shields.io/homebrew/v/jbake.svg["Homebrew Download", link="http://jbake.org/download.html#homebrew"]
+
+image:https://badges.gitter.im/jbake-org/jbake.png["Gitter Chat", link="https://gitter.im/jbake-org/jbake"]
 
 == Documentation
 
@@ -54,33 +57,28 @@ Talk to other users of JBake on the forum:
 
 == Build System
 
-The project uses Apache Maven as the build system. To build the JBake distribution ZIP file execute the following command from the root of the repo:
+The project uses http://gradle.org[Gradle] as the build system. To build the JBake distribution ZIP file execute the following command from the root of the repo:
 
 ----
-$ mvn package
+$ ./gradlew distZip
 ----
 
-This will build a ZIP file in the `/dist` folder.
+This will build a ZIP file in the `/build/distributions` folder.
 
-Alternatively you can run directly from the source code using the Maven exec plugin:
-
-----
-$ mvn exec:java -Dexec.mainClass=org.jbake.launcher.Main -Dexec.args="/fromFolder /tmp/toFolder/"
-----
+For more information see link:BUILD.adoc[Test, Build and Deploy]
 
 == Tools & Libraries Used
 
 * http://commons.apache.org/[Apache Commons IO, Configuration, Lang & Logging]
-* http://maven.apache.org/[Apache Maven]
 * http://args4j.kohsuke.org/[Args4j]
 * http://asciidoctor.org/[AsciidoctorJ]
-* http://www.eclipse.org/[Eclipse IDE]
 * http://freemarker.org/[Freemarker]
+* http://gradle.org[Gradle]
+* http://groovy-lang.org/[Groovy]
 * http://junit.org/[JUnit]
 * http://pegdown.org/[Pegdown]
 * http://www.eclipse.org/jetty/[Jetty Server]
 * http://www.orientdb.org/[OrientDB]
-* http://groovy-lang.org/[Groovy]
 
 == Copyright & License
 
