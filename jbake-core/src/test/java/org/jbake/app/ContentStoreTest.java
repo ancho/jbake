@@ -39,7 +39,7 @@ public class ContentStoreTest extends ContentStoreIntegrationTest {
 
         ODocument doc = new ODocument(DOC_TYPE_POST);
         Map<String, String> values = new HashMap();
-        values.put(Crawler.Attributes.TYPE, DOC_TYPE_POST);
+        values.put(DocumentAttributes.TYPE.toString(), DOC_TYPE_POST);
         values.put(DocumentAttributes.SOURCE_URI.toString(), uri);
         values.put("foo", "originalValue");
         doc.fromMap(values);

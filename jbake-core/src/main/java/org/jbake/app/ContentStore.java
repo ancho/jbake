@@ -48,7 +48,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 /**
  * @author jdlee
  */
@@ -188,6 +187,7 @@ public class ContentStore {
 
     /**
      * Get a document by sourceUri and update it from the given map.
+     *
      * @param incomingDocMap The document's db columns.
      * @return The saved document.
      * @throws IllegalArgumentException if sourceUri or docType are null, or if the document doesn't exist.
@@ -199,7 +199,7 @@ public class ContentStore {
             throw new IllegalArgumentException("Document sourceUri is null.");
         }
 
-        String docType = (String) incomingDocMap.get(Crawler.Attributes.TYPE);
+        String docType = (String) incomingDocMap.get(DocumentAttributes.TYPE.toString());
 
         if (null == docType) {
             throw new IllegalArgumentException("Document docType is null.");
@@ -355,7 +355,7 @@ public class ContentStore {
         DocumentList docs = this.getAllTagsFromPublishedPosts();
         Set<String> result = new HashSet<>();
         for (Map<String, Object> document : docs) {
-            String[] tags = DBUtil.toStringArray(document.get(Crawler.Attributes.TAGS));
+            String[] tags = DBUtil.toStringArray(document.get(DocumentAttributes.TAGS.toString()));
             Collections.addAll(result, tags);
         }
         return result;
@@ -367,7 +367,7 @@ public class ContentStore {
             String statement = String.format(STATEMENT_GET_TAGS_BY_DOCTYPE, docType);
             DocumentList docs = query(statement);
             for (Map<String, Object> document : docs) {
-                String[] tags = DBUtil.toStringArray(document.get(Crawler.Attributes.TAGS));
+                String[] tags = DBUtil.toStringArray(document.get(DocumentAttributes.TAGS.toString()));
                 Collections.addAll(result, tags);
             }
         }
