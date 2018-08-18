@@ -4,8 +4,9 @@ import com.orientechnologies.orient.core.record.impl.ODocument;
 import java.util.HashMap;
 import java.util.Map;
 import org.jbake.FakeDocumentBuilder;
-import org.jbake.model.DocumentAttributes;
 import static org.junit.Assert.assertEquals;
+
+import org.jbake.model.ModelAttributes;
 import org.junit.Test;
 
 public class ContentStoreTest extends ContentStoreIntegrationTest {
@@ -17,15 +18,13 @@ public class ContentStoreTest extends ContentStoreIntegrationTest {
 
         for (int i = 0; i < 5; i++) {
             FakeDocumentBuilder builder = new FakeDocumentBuilder(DOC_TYPE_POST);
-            builder.withName("dummyfile" + i)
-                    .withStatus("published")
+            builder.withStatus("published")
                     .withRandomSha1()
                     .build();
         }
 
         FakeDocumentBuilder builder = new FakeDocumentBuilder(DOC_TYPE_POST);
-        builder.withName("draftdummy")
-                .withStatus("draft")
+        builder.withStatus("draft")
                 .withRandomSha1()
                 .build();
 
@@ -39,8 +38,8 @@ public class ContentStoreTest extends ContentStoreIntegrationTest {
 
         ODocument doc = new ODocument(DOC_TYPE_POST);
         Map<String, String> values = new HashMap();
-        values.put(DocumentAttributes.TYPE.toString(), DOC_TYPE_POST);
-        values.put(DocumentAttributes.SOURCE_URI.toString(), uri);
+        values.put(ModelAttributes.TYPE.toString(), DOC_TYPE_POST);
+        values.put(ModelAttributes.SOURCE_URI.toString(), uri);
         values.put("foo", "originalValue");
         doc.fromMap(values);
         doc.save();

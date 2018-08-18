@@ -19,8 +19,8 @@ import java.io.StringWriter;
  */
 public class Main {
 
-    private final String USAGE_PREFIX = "Usage: jbake";
-    private final String ALT_USAGE_PREFIX = "   or  jbake";
+    private static final String USAGE_PREFIX = "Usage: jbake";
+    private static final String ALT_USAGE_PREFIX = "   or  jbake";
     private Baker baker;
     private JettyServer jettyServer;
     private BakeWatcher watcher;
