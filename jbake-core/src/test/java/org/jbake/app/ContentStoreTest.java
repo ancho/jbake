@@ -6,6 +6,7 @@ import java.util.Map;
 import org.jbake.FakeDocumentBuilder;
 import static org.junit.Assert.assertEquals;
 
+import org.jbake.model.DocumentModel;
 import org.jbake.model.ModelAttributes;
 import org.junit.Test;
 
@@ -38,8 +39,8 @@ public class ContentStoreTest extends ContentStoreIntegrationTest {
 
         ODocument doc = new ODocument(DOC_TYPE_POST);
         Map<String, String> values = new HashMap();
-        values.put(ModelAttributes.TYPE.toString(), DOC_TYPE_POST);
-        values.put(ModelAttributes.SOURCE_URI.toString(), uri);
+        values.put(ModelAttributes.TYPE, DOC_TYPE_POST);
+        values.put(ModelAttributes.SOURCE_URI, uri);
         values.put("foo", "originalValue");
         doc.fromMap(values);
         doc.save();
@@ -48,7 +49,7 @@ public class ContentStoreTest extends ContentStoreIntegrationTest {
         values.put("foo", "newValue");
         db.mergeDocument(values);
 
-        DocumentList docs = db.getDocumentByUri(DOC_TYPE_POST, uri);
+        DocumentList<DocumentModel> docs = db.getDocumentByUri(DOC_TYPE_POST, uri);
         assertEquals(1, docs.size());
         assertEquals("newValue", docs.get(0).get("foo"));
 
