@@ -6,7 +6,6 @@ import org.jbake.app.Renderer;
 import org.jbake.app.configuration.JBakeConfiguration;
 import org.jbake.model.DocumentModel;
 import org.jbake.model.DocumentTypes;
-import org.jbake.template.RenderingException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,7 +18,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class DocumentsRendererTest {
 
@@ -82,10 +86,6 @@ public class DocumentsRendererTest {
     @Test
     public void shouldThrowAnExceptionWithCollectedErrorMessages() throws Exception {
         String fakeExceptionMessage = "fake exception";
-        // expect
-        exception.expect(RenderingException.class);
-        exception.expectMessage(fakeExceptionMessage + "\n" + fakeExceptionMessage);
-
         // given
         DocumentTypes.addDocumentType("customType");
 
@@ -101,10 +101,11 @@ public class DocumentsRendererTest {
         when(db.getUnrenderedContent("customType")).thenReturn(templateModelList);
 
         // when
-        int renderResponse = documentsRenderer.render(renderer, db, configuration);
-
+        documentsRenderer.render(renderer, db, configuration);
+        renderer.shutdown();
         // then
-        assertThat(renderResponse).isEqualTo(2);
+        assertThat(renderer.getRenderCount()).isEqualTo(0);
+        verify(renderer, times(2)).addError(any());
     }
 
     @Test

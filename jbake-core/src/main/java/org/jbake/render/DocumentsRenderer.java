@@ -52,23 +52,16 @@ public class DocumentsRenderer implements RenderingTool {
 
                 } catch (Exception e) {
                     errors.add(e.getMessage());
+                    renderer.addError(e);
                 }
 
                 index++;
             }
 
             db.markContentAsRendered(docType);
+
         }
-        if (!errors.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Failed to render documents. Cause(s):");
-            for (String error : errors) {
-                sb.append("\n").append(error);
-            }
-            throw new RenderingException(sb.toString());
-        } else {
-            return renderedCount;
-        }
+        return renderedCount;
     }
 
     /**
