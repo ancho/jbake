@@ -19,7 +19,6 @@ public class DocumentsRenderer implements RenderingTool {
     public int render(Renderer renderer, ContentStore db, JBakeConfiguration config) throws RenderingException {
         int renderedCount = 0;
         int index = 0;
-        final List<String> errors = new LinkedList<>();
         DocumentModel nextDocument = null;
 
         DocumentList<DocumentModel> documentList = db.getUnrenderedContent();
@@ -34,12 +33,12 @@ public class DocumentsRenderer implements RenderingTool {
 
                 if (index < documentList.size() - 1) {
                     DocumentModel tempNext = findPrevPublishedDocument(documentList, index);
-                    if (tempNext != null) {
+                    if (tempNext !=null ) {
                         document.setPreviousContent(getContentForNav(tempNext));
                     }
                 }
 
-                if (isPublished(document)) {
+                if ( isPublished(document) ) {
                     nextDocument = document;
                 }
 
@@ -48,26 +47,19 @@ public class DocumentsRenderer implements RenderingTool {
                 renderedCount++;
 
             } catch (Exception e) {
-                errors.add(e.getMessage());
+                renderer.addError(e);
             }
 
             index++;
         }
 
-        if (!errors.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Failed to render documents. Cause(s):");
-            for (String error : errors) {
-                sb.append("\n").append(error);
-            }
-            throw new RenderingException(sb.toString());
-        } else {
-            return renderedCount;
-        }
+
+        return renderedCount;
+
     }
 
     private DocumentModel findPrevPublishedDocument(DocumentList<DocumentModel> documentList, int index) {
-        for ( int prevDocIndex = index+1; prevDocIndex < documentList.size(); ++prevDocIndex ) {
+        for (int prevDocIndex = index + 1; prevDocIndex < documentList.size(); ++prevDocIndex) {
             DocumentModel prevDocument = documentList.get(prevDocIndex);
             if (isPublished(prevDocument)) {
                 return prevDocument;
