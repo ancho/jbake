@@ -33,7 +33,6 @@ import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OSchema;
 import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.orientechnologies.orient.core.record.impl.ODocument;
-import com.orientechnologies.orient.core.sql.OCommandSQL;
 import com.orientechnologies.orient.core.sql.executor.OResultSet;
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 import org.jbake.model.DocumentModel;
@@ -194,11 +193,11 @@ public class ContentStore {
      * @throws IllegalArgumentException if sourceUri or docType are null, or if the document doesn't exist.
      */
     public ODocument mergeDocument(Map<String, ? extends Object> incomingDocMap) {
-        String sourceUri = (String) incomingDocMap.get(ModelAttributes.SOURCE_URI.toString());
+        String sourceUri = (String) incomingDocMap.get(ModelAttributes.SOURCE_URI);
         if (null == sourceUri) {
             throw new IllegalArgumentException("Document sourceUri is null.");
         }
-        String docType = (String) incomingDocMap.get(ModelAttributes.TYPE.toString());
+        String docType = (String) incomingDocMap.get(ModelAttributes.TYPE);
         if (null == docType) {
             throw new IllegalArgumentException("Document docType is null.");
         }
@@ -346,7 +345,9 @@ public class ContentStore {
 
     private void executeCommand(String query, Object... args) {
         activateOnCurrentThread();
-        db.command(new OCommandSQL(query)).execute(args);
+        db.getTransaction().begin();
+        db.command(query, args);
+        db.getTransaction().commit();
     }
 
     public Set<String> getTags() {
@@ -456,5 +457,13 @@ public class ContentStore {
 
     public boolean isActive() {
         return db.isActiveOnCurrentThread();
+    }
+
+    public synchronized void saveDocument(String type, DocumentModel documentModel) {
+        db.getTransaction().begin();
+        ODocument doc = new ODocument(type);
+        doc.fromMap(documentModel);
+        doc.save();
+        db.getTransaction().commit();
     }
 }

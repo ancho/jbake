@@ -6,8 +6,6 @@ import org.hamcrest.Description;
 import org.jbake.model.DocumentModel;
 import org.jbake.model.ModelAttributes;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Map;
@@ -18,7 +16,7 @@ import static org.hamcrest.CoreMatchers.is;
 public class CrawlerTest extends ContentStoreIntegrationTest {
 
     @Test
-    public void crawl() {
+    public void crawl() throws InterruptedException {
         Crawler crawler = new Crawler(db, config);
         crawler.crawl();
 
@@ -51,7 +49,7 @@ public class CrawlerTest extends ContentStoreIntegrationTest {
     }
 
     @Test
-    public void renderWithPrettyUrls() {
+    public void renderWithPrettyUrls() throws InterruptedException {
 
         config.setUriWithoutExtension(true);
         config.setPrefixForUriWithoutExtension("/blog");

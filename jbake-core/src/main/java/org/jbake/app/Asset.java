@@ -24,7 +24,7 @@ public class Asset {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Asset.class);
     private final List<Throwable> errors = new LinkedList<>();
-    private JBakeConfiguration config;
+    private final JBakeConfiguration config;
 
     /**
      * @param source      Source file for the asset
@@ -62,12 +62,7 @@ public class Asset {
      * @param path The starting path
      */
     public void copy(File path) {
-        FileFilter filter = new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                return (!config.getAssetIgnoreHidden() || !file.isHidden()) && (file.isFile() || FileUtil.directoryOnlyIfNotIgnored(file));
-            }
-        };
+        FileFilter filter = file -> (!config.getAssetIgnoreHidden() || !file.isHidden()) && (file.isFile() || FileUtil.directoryOnlyIfNotIgnored(file));
         copy(path, config.getDestinationFolder(), filter);
     }
 
@@ -140,18 +135,14 @@ public class Asset {
     }
 
     private void copy(File sourceFolder, File targetFolder, final FileFilter filter) {
-        final File[] assets = sourceFolder.listFiles(filter);
-        if (assets != null) {
-            Arrays.sort(assets);
-            for (File asset : assets) {
-                final File target = new File(targetFolder, asset.getName());
-                if (asset.isFile()) {
-                    copyFile(asset, target);
-                } else if (asset.isDirectory()) {
-                    copy(asset, target, filter);
-                }
+        Arrays.stream(sourceFolder.listFiles(filter)).parallel().forEach( asset -> {
+            final File target = new File(targetFolder, asset.getName());
+            if (asset.isFile()) {
+                copyFile(asset, target);
+            } else if (asset.isDirectory()) {
+                copy(asset, target, filter);
             }
-        }
+        });
     }
 
     private void copyFile(File asset, File targetFolder) {
