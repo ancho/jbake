@@ -135,14 +135,17 @@ public class Asset {
     }
 
     private void copy(File sourceFolder, File targetFolder, final FileFilter filter) {
-        Arrays.stream(sourceFolder.listFiles(filter)).parallel().forEach( asset -> {
-            final File target = new File(targetFolder, asset.getName());
-            if (asset.isFile()) {
-                copyFile(asset, target);
-            } else if (asset.isDirectory()) {
-                copy(asset, target, filter);
-            }
-        });
+        File[] array = sourceFolder.listFiles(filter);
+        if ( array != null ) {
+            Arrays.stream(array).parallel().forEach(asset -> {
+                final File target = new File(targetFolder, asset.getName());
+                if (asset.isFile()) {
+                    copyFile(asset, target);
+                } else if (asset.isDirectory()) {
+                    copy(asset, target, filter);
+                }
+            });
+        }
     }
 
     private void copyFile(File asset, File targetFolder) {
