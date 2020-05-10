@@ -64,12 +64,11 @@ public class GroovyMarkupTemplateEngineRenderingTest extends AbstractTemplateEng
     @Test
     public void renderCustomTypePaper() throws Exception {
         // setup
-        config.setTemplateFileNameForDocType("paper", "paper." + templateExtension);
-        DocumentTypes.addDocumentType("paper");
-        db.updateSchema();
+
 
         Crawler crawler = new Crawler(db, config);
         crawler.crawl();
+        crawler.shutdown();
         Parser parser = new Parser(config);
         Renderer renderer = new Renderer(db, config);
         String filename = "published-paper.html";

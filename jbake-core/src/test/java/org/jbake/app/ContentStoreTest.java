@@ -32,38 +32,4 @@ public class ContentStoreTest extends ContentStoreIntegrationTest {
         assertEquals(6, db.getDocumentCount(DOC_TYPE_POST));
         assertEquals(5, db.getPublishedCount(DOC_TYPE_POST));
     }
-
-    @Test
-    public void testMergeDocument() {
-        final String uri = "test/testMergeDocument";
-
-        ODocument doc = new ODocument(DOC_TYPE_POST);
-        Map<String, String> values = new HashMap();
-        values.put(ModelAttributes.TYPE, DOC_TYPE_POST);
-        values.put(ModelAttributes.SOURCE_URI, uri);
-        values.put("foo", "originalValue");
-        doc.fromMap(values);
-        doc.save();
-
-        // 1st
-        values.put("foo", "newValue");
-        db.mergeDocument(values);
-
-        DocumentList<DocumentModel> docs = db.getDocumentByUri(DOC_TYPE_POST, uri);
-        assertEquals(1, docs.size());
-        assertEquals("newValue", docs.get(0).get("foo"));
-
-        // 2nd
-        values.put("foo", "anotherValue");
-        db.mergeDocument(values);
-
-        docs = db.getDocumentByUri(DOC_TYPE_POST, uri);
-        assertEquals(1, docs.size());
-        assertEquals("anotherValue", docs.get(0).get("foo"));
-
-        db.deleteContent(DOC_TYPE_POST, uri);
-        docs = db.getDocumentByUri(DOC_TYPE_POST, uri);
-        assertEquals(0, docs.size());
-    }
-
 }

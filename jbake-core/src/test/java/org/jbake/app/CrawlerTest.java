@@ -1,6 +1,7 @@
 package org.jbake.app;
 
 import org.apache.commons.io.FilenameUtils;
+import org.assertj.core.api.Assertions;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.jbake.model.DocumentModel;
@@ -9,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
@@ -19,6 +21,7 @@ public class CrawlerTest extends ContentStoreIntegrationTest {
     public void crawl() throws InterruptedException {
         Crawler crawler = new Crawler(db, config);
         crawler.crawl();
+        crawler.shutdown();
 
         Assert.assertEquals(4, db.getDocumentCount("post"));
         Assert.assertEquals(3, db.getDocumentCount("page"));
@@ -56,6 +59,7 @@ public class CrawlerTest extends ContentStoreIntegrationTest {
 
         Crawler crawler = new Crawler(db, config);
         crawler.crawl();
+        crawler.shutdown();
 
         Assert.assertEquals(4, db.getDocumentCount("post"));
         Assert.assertEquals(3, db.getDocumentCount("page"));
@@ -65,9 +69,9 @@ public class CrawlerTest extends ContentStoreIntegrationTest {
         for (DocumentModel model : documents) {
             String noExtensionUri = "blog/\\d{4}/" + FilenameUtils.getBaseName(model.getFile()) + "/";
 
-            Assert.assertThat(model.getNoExtensionUri(), RegexMatcher.matches(noExtensionUri));
-            Assert.assertThat(model.getUri(), RegexMatcher.matches(noExtensionUri + "index\\.html"));
-            Assert.assertThat(model.getRootPath(), is("../../../"));
+            Assertions.assertThat(model.getNoExtensionUri()).matches(Pattern.compile(noExtensionUri));
+            Assertions.assertThat(model.getUri()).matches(Pattern.compile(noExtensionUri + "index\\.html"));
+            Assertions.assertThat(model.getRootPath()).isEqualTo("../../../");
         }
     }
 
