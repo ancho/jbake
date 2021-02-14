@@ -19,7 +19,7 @@ script:
 jdk:
   - openjdk14
   - openjdk11
-  - openjdk8
+  - openjdk9
 
 jobs:
   include:
