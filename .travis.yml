@@ -17,7 +17,6 @@ script:
 - "./gradlew check --stacktrace"
 
 jdk:
-  - openjdk16
   - openjdk15
   - openjdk11
 
@@ -26,6 +25,9 @@ jobs:
 
   - jdk: openjdk8
     dist: bionic
+    script:
+        - "jdk_switcher use openjdk8"
+        - "./gradlew check --stacktrace"
 
   - jdk: openjdk14
     os: osx
