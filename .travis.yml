@@ -24,7 +24,6 @@ jobs:
   include:
 
   - jdk: openjdk8
-    dist: bionic
     script:
         - "jdk_switcher use openjdk8"
         - "./gradlew check --stacktrace"
