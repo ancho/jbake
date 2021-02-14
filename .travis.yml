@@ -17,6 +17,7 @@ script:
 - "./gradlew check --stacktrace"
 
 jdk:
+  - openjdk16
   - openjdk15
   - openjdk11
 
