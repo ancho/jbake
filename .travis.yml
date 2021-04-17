@@ -17,13 +17,13 @@ script:
 - "./gradlew check --stacktrace"
 
 jdk:
-  - openjdk15
+  - openjdk16
   - openjdk11
 
 jobs:
   include:
 
-  - jdk: openjdk15
+  - jdk: openjdk16
     os: osx
 
   - jdk: openjdk11
