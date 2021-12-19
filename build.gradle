@@ -43,8 +43,8 @@ allprojects {
 
         tasks.withType(Checkstyle) {
             reports {
-                xml.enabled false
-                html.enabled true
+                xml.required.set(false)
+                html.required.set(true)
             }
         }
 
@@ -148,8 +148,8 @@ subprojects {
 
     jacocoTestReport {
         reports {
-            xml.enabled = true // coveralls plugin depends on xml format report
-            html.enabled = true
+            xml.required.set(true) // coveralls plugin depends on xml format report
+            html.required.set(true)
         }
     }
 
@@ -171,8 +171,8 @@ task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
     executionData.from jacocoMerge.executionData
 
     reports {
-        html.enabled = true
-        xml.enabled = true
+        html.required.set(true)
+        xml.required.set(true)
     }
 }
 
