@@ -175,7 +175,7 @@ class AssetTest extends LoggingTest {
         File cssFile = css.resolve("bootstrap.min.css").toFile();
         FileUtils.touch(cssFile);
 
-        Files.setAttribute(css, "dos:readonly", true);
+        Files.setAttribute(cssFile.toPath(), "dos:readonly", true);
 
         config.setAssetFolder(assets);
         config.setDestinationFolder(folder.toFile());
