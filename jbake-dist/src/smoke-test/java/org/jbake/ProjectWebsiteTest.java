@@ -58,10 +58,8 @@ class ProjectWebsiteTest {
         cmd.setURI(WEBSITE_REPO_URL);
         cmd.setDirectory(projectFolder);
 
-        cmd.call();
-
-        var gitPath = projectFolder.toPath().resolve(".git");
-        FileUtils.deleteDirectory(gitPath.toFile());
+        Git cloned = cmd.call();
+        cloned.close();
 
         assertThat(new File(projectFolder, "README.md").exists()).isTrue();
     }
