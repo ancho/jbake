@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -49,7 +50,7 @@ class ProjectWebsiteTest {
         process.destroy();
     }
 
-    private void cloneJbakeWebsite() throws GitAPIException {
+    private void cloneJbakeWebsite() throws GitAPIException, IOException {
         CloneCommand cmd = Git.cloneRepository();
         cmd.setBare(false);
         cmd.setBranch("master");
@@ -58,6 +59,9 @@ class ProjectWebsiteTest {
         cmd.setDirectory(projectFolder);
 
         cmd.call();
+
+        var gitPath = projectFolder.toPath().resolve(".git");
+        FileUtils.deleteDirectory(gitPath.toFile());
 
         assertThat(new File(projectFolder, "README.md").exists()).isTrue();
     }
